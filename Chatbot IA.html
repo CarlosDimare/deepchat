@@ -129,19 +129,7 @@
     </div>
 
     <script>
-        let openai;
         let isProcessing = false;
-
-        async function initializeOpenAI() {
-            const { pipeline } = await import('@huggingface/huggingface');
-            openai = pipeline('text-generation', 'deepseek-ai/r1-zero', {
-                headers: {
-                    Authorization: 'Bearer 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'
-                }
-            });
-        }
-
-        initializeOpenAI();
 
         const chatMessages = document.getElementById('chat-messages');
         const userInput = document.getElementById('user-input');
@@ -178,6 +166,10 @@
                     },
                     body: JSON.stringify({ inputs: userMessage })
                 });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
 
                 const data = await response.json();
 
